@@ -8,8 +8,6 @@ public class MirrorCamera : MonoBehaviour
 
     private GameObject mainCamera;
     private string mainCameraTag = "MainCamera";
-    private Transform relativePlayerPosition;
-    private Vector3 reflectionVector;
 
     // Start is called before the first frame update
     void Start()
@@ -21,18 +19,17 @@ public class MirrorCamera : MonoBehaviour
     void Update()
     {
 
-        // create a plane object representing the Plane
-        var plane = new Plane(-planeTransform.up, planeTransform.position);
+        Vector3 reflectionX = Vector3.Reflect(planeTransform.position - mainCamera.transform.position, planeTransform.right);
 
-        // get the closest point on the plane for the Source position
-        var mirrorPoint = plane.ClosestPointOnPlane(mainCamera.transform.position);
+        Vector3 reflectionY = Vector3.Reflect(planeTransform.position + reflectionX - planeTransform.position, planeTransform.forward);
 
-        // get the position of Source relative to the mirrorPoint
-        var distance = mainCamera.transform.position - mirrorPoint;
+        transform.position = planeTransform.position + reflectionY;
 
-        // Move from the mirrorPoint the same vector but inverted
-        transform.position = mirrorPoint - distance;
-        transform.LookAt(mirrorPoint);
+        transform.LookAt(planeTransform.position);
+
+        // Vectors to help visualize mirror camera positioning (Uncomment for debug purposes)
+        //Debug.DrawLine(mainCamera.transform.position, planeTransform.position, Color.green, 0, false);
+        //Debug.DrawLine(planeTransform.position, planeTransform.position + reflectionY, Color.red, 0, false);
 
     }
 }
