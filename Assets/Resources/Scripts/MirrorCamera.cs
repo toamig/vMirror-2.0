@@ -14,6 +14,7 @@ public class MirrorCamera : MonoBehaviour
     {
         mainCamera = GameObject.FindGameObjectWithTag(mainCameraTag);
         gameObject.GetComponent<Camera>().usePhysicalProperties = true;
+        gameObject.GetComponent<Camera>().gateFit = Camera.GateFitMode.None;
     }
 
     // Update is called once per frame
@@ -21,9 +22,7 @@ public class MirrorCamera : MonoBehaviour
     {
 
         UpdatePosition();
-
         UpdateRotation();
-
         UpdateProperties();
 
     }
@@ -31,15 +30,15 @@ public class MirrorCamera : MonoBehaviour
     // Updates camera position based on player's relative position to the mirror plane
     public void UpdatePosition()
     {
-        Vector3 reflectionX = Vector3.Reflect(planeTransform.position - mainCamera.transform.position, planeTransform.right);
+        Vector3 reflectionX = Vector3.Reflect(planeTransform.position - mainCamera.transform.position, planeTransform.forward);
 
-        Vector3 reflectionY = Vector3.Reflect(planeTransform.position + reflectionX - planeTransform.position, planeTransform.forward);
+        Vector3 reflectionY = Vector3.Reflect(planeTransform.position + reflectionX - planeTransform.position, planeTransform.right);
 
         transform.position = planeTransform.position + reflectionY;
 
         // Vectors to help visualize mirror camera positioning (Uncomment for debug purposes)
-        //Debug.DrawLine(mainCamera.transform.position, planeTransform.position, Color.green, 0, false);
-        //Debug.DrawLine(planeTransform.position, planeTransform.position + reflectionY, Color.red, 0, false);
+        Debug.DrawLine(mainCamera.transform.position, planeTransform.position, Color.green, 0, false);
+        Debug.DrawLine(planeTransform.position, planeTransform.position + reflectionY, Color.red, 0, false);
 
     }
 
@@ -48,29 +47,28 @@ public class MirrorCamera : MonoBehaviour
     {
         Quaternion rotation = Quaternion.LookRotation(planeTransform.up.normalized);
         transform.rotation = rotation;
+
     }
 
     // Updates physical camera properties based on camera relative position to the mirror plane
     public void UpdateProperties()
     {
-        Renderer planeRenderer = planeTransform.gameObject.GetComponent<MeshRenderer>();
+        BoxCollider planeCollider = planeTransform.gameObject.GetComponent<BoxCollider>(); // using a Box Collider to keep the size no matter what rotation
 
-        float planeXbounds = planeRenderer.bounds.size.x;
-        float planeZbounds = planeRenderer.bounds.size.z;
+        float planeX = planeCollider.size.x * Mathf.Abs(planeTransform.localScale.x);
+        float planeY = planeCollider.size.z * Mathf.Abs(planeTransform.localScale.z);
 
-        float planeSide = Mathf.Sqrt(Mathf.Pow(planeXbounds, 2) + Mathf.Pow(planeZbounds, 2)); // get the side of the plane no matter what rotation
         Vector3 direction = planeTransform.position - transform.position;
-
         Vector3 localDirection = transform.InverseTransformDirection(direction); // obtain direction with relative local values
 
-        float shiftX = localDirection.x / planeSide;
-        float shiftY = localDirection.y / planeSide;
+        float shiftX = localDirection.x / planeX;
+        float shiftY = localDirection.y / planeY; // lens shift is based on sensor size (%)
 
         Plane plane = new Plane(-planeTransform.up, planeTransform.position); // create plane to make use of GetDistanceToPoint() method
 
         gameObject.GetComponent<Camera>().nearClipPlane = plane.GetDistanceToPoint(gameObject.transform.position);
         gameObject.GetComponent<Camera>().focalLength = plane.GetDistanceToPoint(gameObject.transform.position);
-        gameObject.GetComponent<Camera>().sensorSize = new Vector2(planeSide, planeSide);
+        gameObject.GetComponent<Camera>().sensorSize = new Vector2(planeX, planeY);
         gameObject.GetComponent<Camera>().lensShift = new Vector2(shiftX, shiftY);
     }
 
