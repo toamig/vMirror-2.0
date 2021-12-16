@@ -674,6 +674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mirror: {fileID: 1668882926}
+  player: {fileID: 963194225}
 --- !u!4 &1955975882 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2578656236811812118, guid: 27cb544d5eed0de4c82df62025de66c0, type: 3}
