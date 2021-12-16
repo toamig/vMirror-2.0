@@ -45,8 +45,7 @@ public class MirrorCamera : MonoBehaviour
     // Update camera rotation based on mirror plane rotation
     public void UpdateRotation()
     {
-        Quaternion rotation = Quaternion.LookRotation(planeTransform.up.normalized);
-        transform.rotation = rotation;
+        
 
     }
 
