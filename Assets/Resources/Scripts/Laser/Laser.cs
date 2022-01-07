@@ -55,7 +55,9 @@ public class Laser : MonoBehaviour
                 {
                     Vector3 reflectionDir = (hit.point - mirrorCamera.transform.position).normalized;
 
-                    reflected.gameObject.transform.position = mirrorCamera.transform.localPosition;
+                    
+
+                    //reflected.gameObject.transform.position = mirrorCamera.transform.position;
                     reflected.gameObject.transform.LookAt(hit.point + reflectionDir);
 
                     Ray ray = new Ray(mirrorCamera.gameObject.transform.position, reflectionDir);
@@ -63,18 +65,19 @@ public class Laser : MonoBehaviour
                     // raycast from mirrorCamera
                     reflectionHits = Physics.RaycastAll(ray);
 
-                    reflected.SetPosition(0, new Vector3(0, 0, reflectionHits[0].distance));
+                    RaycastHit[] orderedHits = OrderByDistance(reflectionHits);
+
+                    reflected.SetPosition(0, new Vector3(0, 0, orderedHits[0].distance));
 
 
                     if (reflectionHits.Length > 1)
                     {
-                        //TODO: ordenar hits
-                        reflected.SetPosition(0, new Vector3(0, 0, reflectionHits[0].distance));
-                        reflected.SetPosition(1, new Vector3(0, 0, reflectionHits[1].distance));
+                        reflected.SetPosition(0, new Vector3(0, 0, orderedHits[0].distance));
+                        reflected.SetPosition(1, new Vector3(0, 0, orderedHits[1].distance));
                     }
                     else
                     {
-                        reflected.SetPosition(0, new Vector3(0, 0, reflectionHits[0].distance));
+                        reflected.SetPosition(0, new Vector3(0, 0, orderedHits[0].distance));
                         reflected.SetPosition(1, new Vector3(0, 0, 5000));
                     }
 
@@ -110,6 +113,8 @@ public class Laser : MonoBehaviour
 
         hitsList.Sort((hit1, hit2) => hit1.distance.CompareTo(hit2.distance));
 
-        return hitsList.ToArray();
+        RaycastHit[] orderedHits = hitsList.ToArray();
+
+        return orderedHits;
     }
 }
