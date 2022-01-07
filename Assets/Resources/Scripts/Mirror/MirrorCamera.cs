@@ -37,8 +37,8 @@ public class MirrorCamera : MonoBehaviour
         transform.position = planeTransform.position + reflectionY;
 
         // Vectors to help visualize mirror camera positioning (Uncomment for debug purposes)
-        Debug.DrawLine(mainCamera.transform.position, planeTransform.position, Color.green, 0, false);
-        Debug.DrawLine(planeTransform.position, planeTransform.position + reflectionY, Color.red, 0, false);
+        //Debug.DrawLine(mainCamera.transform.position, planeTransform.position, Color.green, 0, false);
+        //Debug.DrawLine(planeTransform.position, planeTransform.position + reflectionY, Color.red, 0, false);
 
     }
 
