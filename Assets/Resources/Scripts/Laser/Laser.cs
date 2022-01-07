@@ -67,7 +67,7 @@ public class Laser : MonoBehaviour
 
                     RaycastHit[] orderedHits = OrderByDistance(reflectionHits);
 
-                    reflected.SetPosition(0, new Vector3(0, 0, orderedHits[0].distance));
+                    
 
 
                     if (reflectionHits.Length > 1)
