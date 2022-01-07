@@ -47,9 +47,10 @@ public class Laser : MonoBehaviour
         {
             if (hit.collider)
             {
-                lr.SetPosition(0, new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z));
-                lr.SetPosition(1, new Vector3(transform.localPosition.x, transform.localPosition.y, hit.distance));
+                lr.SetPosition(0, new Vector3(0, 0, transform.localPosition.z));
+                lr.SetPosition(1, new Vector3(0, 0, hit.distance));
 
+                // Laser hits the mirror
                 if (hit.collider.gameObject.layer == 6)
                 {
                     Vector3 reflectionDir = (hit.point - mirrorCamera.transform.position).normalized;
@@ -57,21 +58,24 @@ public class Laser : MonoBehaviour
                     reflected.gameObject.transform.position = mirrorCamera.transform.localPosition;
                     reflected.gameObject.transform.LookAt(hit.point + reflectionDir);
 
-                    // raycast from mirrorCamera
-                    reflectionHits = Physics.RaycastAll(mirrorCamera.gameObject.transform.position, reflectionDir);
+                    Ray ray = new Ray(mirrorCamera.gameObject.transform.position, reflectionDir);
 
-                    
+                    // raycast from mirrorCamera
+                    reflectionHits = Physics.RaycastAll(ray);
+
+                    reflected.SetPosition(0, new Vector3(0, 0, reflectionHits[0].distance));
+
 
                     if (reflectionHits.Length > 1)
                     {
-                        reflectionHits = OrderByDistance(reflectionHits);
-                        reflected.SetPosition(0, new Vector3(reflected.gameObject.transform.localPosition.x, reflected.gameObject.transform.localPosition.y, reflectionHits[0].distance));
-
-                        reflected.SetPosition(1, new Vector3(reflected.gameObject.transform.localPosition.x, reflected.gameObject.transform.localPosition.y, reflectionHits[1].distance));
+                        //TODO: ordenar hits
+                        reflected.SetPosition(0, new Vector3(0, 0, reflectionHits[0].distance));
+                        reflected.SetPosition(1, new Vector3(0, 0, reflectionHits[1].distance));
                     }
                     else
                     {
-                        reflected.SetPosition(1, new Vector3(reflected.gameObject.transform.localPosition.x, reflected.gameObject.transform.localPosition.y, 5000));
+                        reflected.SetPosition(0, new Vector3(0, 0, reflectionHits[0].distance));
+                        reflected.SetPosition(1, new Vector3(0, 0, 5000));
                     }
 
                 }
@@ -88,7 +92,7 @@ public class Laser : MonoBehaviour
         }
         else
         {
-            lr.SetPosition(1, new Vector3(transform.localPosition.x, transform.localPosition.y, 5000));
+            lr.SetPosition(1, new Vector3(0, 0, 5000));
             reflected.SetPositions(new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, 0, 0) });
         }
 
