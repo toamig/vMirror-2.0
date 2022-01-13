@@ -122,13 +122,13 @@ public class Laser : MonoBehaviour
 
         if (gameObject.tag == "Ball")
         {
-            outline.OutlineColor = new Vector4(0, 255, 0, 255);
+            outline.OutlineColor = Color.green;
 
             //TODO increment found balls
         }
         else
         {
-            outline.OutlineColor = new Vector4(255, 0, 0, 255);
+            outline.OutlineColor = Color.red;
 
             //TODO increment missed 
         }
