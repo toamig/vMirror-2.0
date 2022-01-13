@@ -26,6 +26,42 @@ public class CustomXRRayInteractor : XRRayInteractor
         set => m_TranslateSpeedC = value;
     }
 
+    [SerializeField]
+    float m_ScaleSpeedC = 10f;
+
+    public float scaleSpeedC
+    {
+        get => m_ScaleSpeedC;
+        set => m_ScaleSpeedC = value;
+    }
+
+    private bool m_Rotating = true;
+
+    [SerializeField]
+    Transform m_mirror;
+
+    public Transform mirror
+    {
+        get => m_mirror;
+        set => m_mirror = value;
+    }
+
+    [SerializeField]
+    GameObject m_laser;
+
+    public GameObject laser
+    {
+        get => m_laser;
+        set => m_laser = value;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        var actionBasedController = xrController as ActionBasedController;
+        actionBasedController.activateAction.action.performed += _ => m_Rotating = !m_Rotating;
+    }
+
     public override void ProcessInteractor(XRInteractionUpdateOrder.UpdatePhase updatePhase)
     {
         base.ProcessInteractor(updatePhase);
@@ -56,18 +92,49 @@ public class CustomXRRayInteractor : XRRayInteractor
                     }
                 }
 
-                var actionBasedController = xrController as ActionBasedController;
-                if (actionBasedController != null)
+                if (m_Rotating)
                 {
-                    if (TryRead2DAxis(actionBasedController.rotateAnchorAction.action, out var rotateAmt))
+                    var actionBasedController = xrController as ActionBasedController;
+                    if (actionBasedController != null)
                     {
-                        RotateAnchorUp(attachTransform, -rotateAmt.x);
-                    }
+                        if (TryRead2DAxis(actionBasedController.rotateAnchorAction.action, out var rotateAmt))
+                        {
+                            RotateAnchorUp(attachTransform, -rotateAmt.x);
+                        }
 
-                    if (TryRead2DAxis(actionBasedController.translateAnchorAction.action, out var translateAmt))
-                    {
-                        RotateAnchorRight(attachTransform, translateAmt.y);
+                        if (TryRead2DAxis(actionBasedController.translateAnchorAction.action, out var translateAmt))
+                        {
+                            RotateAnchorRight(attachTransform, translateAmt.y);
+                        }
                     }
+                }
+                else
+                {
+                    var actionBasedController = xrController as ActionBasedController;
+                    if (actionBasedController != null)
+                    {
+                        if (TryRead2DAxis(actionBasedController.rotateAnchorAction.action, out var rotateAmt))
+                        {
+                            ScaleAnchor(attachTransform, rotateAmt.x);
+                        }
+
+                        if (TryRead2DAxis(actionBasedController.translateAnchorAction.action, out var translateAmt))
+                        {
+                            TranslateAnchor(effectiveRayOrigin, attachTransform, translateAmt.y);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                var actionBasedController = xrController as ActionBasedController;
+                if (actionBasedController.activateAction.action.IsPressed())
+                {
+                    m_laser.SetActive(true);
+                }
+                if (actionBasedController.activateAction.action.WasReleasedThisFrame())
+                {
+                    m_laser.SetActive(false);
                 }
             }
         }
@@ -99,22 +166,14 @@ public class CustomXRRayInteractor : XRRayInteractor
             anchor.Rotate(Vector3.up, rotateAngle);
     }
 
-    protected override void TranslateAnchor(Transform rayOrigin, Transform anchor, float directionAmount)
+    protected virtual void ScaleAnchor(Transform anchor, float directionAmount)
     {
         if (Mathf.Approximately(directionAmount, 0f))
             return;
 
-        var originPosition = rayOrigin.position;
-        var originForward = rayOrigin.forward;
+        var scaleFactor = directionAmount * (m_ScaleSpeedC * Time.deltaTime);
 
-        var resultingPosition = anchor.position + originForward * (directionAmount * m_TranslateSpeedC * Time.deltaTime);
-
-        // Check the delta between the origin position and the calculated position.
-        // Clamp so it doesn't go further back than the origin position.
-        var posInAttachSpace = resultingPosition - originPosition;
-        var dotResult = Vector3.Dot(posInAttachSpace, originForward);
-
-        anchor.position = dotResult > 0f ? resultingPosition : originPosition;
+        mirror.localScale = new Vector3(mirror.localScale.x + scaleFactor, mirror.localScale.y, mirror.localScale.z - scaleFactor);
     }
 
     static bool TryRead2DAxis(InputAction action, out Vector2 output)

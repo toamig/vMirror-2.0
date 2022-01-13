@@ -37,7 +37,6 @@ public class Laser : MonoBehaviour
     void Update()
     {
         
-        
         RaycastHit hit;
 
         RaycastHit[] reflectionHits;
@@ -53,6 +52,8 @@ public class Laser : MonoBehaviour
                 // Laser hits the mirror
                 if (hit.collider.gameObject.layer == 6)
                 {
+                    reflected.gameObject.SetActive(true);
+
                     Vector3 reflectionDir = (hit.point - mirrorCamera.transform.position).normalized;
 
                     
@@ -67,13 +68,15 @@ public class Laser : MonoBehaviour
 
                     RaycastHit[] orderedHits = OrderByDistance(reflectionHits);
 
-                    
 
+                    int startIndex = FindMirrorIndex(orderedHits);
 
-                    if (reflectionHits.Length > 1)
+                    if (reflectionHits.Length > startIndex)
                     {
-                        reflected.SetPosition(0, new Vector3(0, 0, orderedHits[0].distance));
-                        reflected.SetPosition(1, new Vector3(0, 0, orderedHits[1].distance));
+                        reflected.SetPosition(0, new Vector3(0, 0, orderedHits[startIndex].distance));
+                        reflected.SetPosition(1, new Vector3(0, 0, orderedHits[startIndex + 1].distance));
+
+                        AddOutline(orderedHits[startIndex + 1].collider.gameObject); 
                     }
                     else
                     {
@@ -85,6 +88,7 @@ public class Laser : MonoBehaviour
                 else
                 {
                     reflected.SetPositions(new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, 0, 0) });
+                    AddOutline(hit.collider.gameObject);
                 }
 
             }
@@ -99,12 +103,61 @@ public class Laser : MonoBehaviour
             reflected.SetPositions(new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, 0, 0) });
         }
 
-        
+    }
 
-        
+    public void AddOutline(GameObject go)
+    {
+        DisablePreviousOutlines();
 
+        if (go.TryGetComponent(out Outline outline))
+        {
+            outline.enabled = true;
+        }
+        else
+        {
+            go.AddComponent<Outline>();
+            outline.OutlineMode = Outline.Mode.OutlineAll;
+            outline.OutlineWidth = 3;
+        }
 
+        if (gameObject.tag == "Ball")
+        {
+            outline.OutlineColor = new Vector4(0, 255, 0, 255);
 
+            //TODO increment found balls
+        }
+        else
+        {
+            outline.OutlineColor = new Vector4(255, 0, 0, 255);
+
+            //TODO increment missed 
+        }
+    }
+
+    public void DisablePreviousOutlines()
+    {
+        Outline[] outlines = GameObject.FindObjectsOfType<Outline>();
+        foreach (Outline outline in outlines)
+        {
+            outline.enabled = false;
+        }
+    }
+
+    public int FindMirrorIndex(RaycastHit[] hits)
+    {
+        for (int i = 0; i < hits.Length; i++)
+        {
+            if(hits[i].collider.gameObject.layer == 6)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void OnDisable()
+    {
+        reflected.gameObject.SetActive(false);
     }
 
     public RaycastHit[] OrderByDistance(RaycastHit[] hits)
