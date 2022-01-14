@@ -76,7 +76,11 @@ public class Laser : MonoBehaviour
                         reflected.SetPosition(0, new Vector3(0, 0, orderedHits[startIndex].distance));
                         reflected.SetPosition(1, new Vector3(0, 0, orderedHits[startIndex + 1].distance));
 
-                        AddOutline(orderedHits[startIndex + 1].collider.gameObject); 
+                        AddOutline(orderedHits[startIndex + 1].collider.gameObject);
+                        if (orderedHits[startIndex + 1].transform.gameObject.tag.Equals("Ball"))
+                        {
+                            SelectEventSystem.current.TargetSelected(orderedHits[startIndex + 1].transform.gameObject.name);
+                        }
                     }
                     else
                     {
