@@ -21,9 +21,7 @@ public class Stopwatch : MonoBehaviour
         currentTime = 0;
         selectedSpheresIDs = new List<string>();
         SelectEventSystem.current.onTargetSelected += onSphereSelected;
-        startTimerButton.onClick.AddListener(StartTimer);
         resetTimerButton.gameObject.SetActive(false);
-        resetTimerButton.onClick.AddListener(ResetTimer);
     }
 
     // Update is called once per frame
@@ -51,13 +49,13 @@ public class Stopwatch : MonoBehaviour
         }
     }
 
-    private void StartTimer()
+    public void StartTimer()
     {
         stopwatchActive = true;
         startTimerButton.gameObject.SetActive(false);
     }
 
-    private void ResetTimer()
+    public void ResetTimer()
     {
         stopwatchActive = false;
         currentTime = 0;
