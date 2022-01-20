@@ -81,6 +81,10 @@ public class Laser : MonoBehaviour
                         {
                             SelectEventSystem.current.TargetSelected(orderedHits[startIndex + 1].transform.gameObject.name);
                         }
+                        else
+                        {
+                            SelectEventSystem.current.TargetSelected("Miss");
+                        }
                     }
                     else
                     {

@@ -7,9 +7,11 @@ using System;
 public class Stopwatch : MonoBehaviour
 {
 
+    int numberOfErrors = 0;
     bool stopwatchActive = false;
     float currentTime;
     public Text currentTimeText;
+    public Text errors;
     private List<string> selectedSpheresIDs;
     private static int numberOfSpheresToSelect = 4;
     public Button startTimerButton;
@@ -18,23 +20,33 @@ public class Stopwatch : MonoBehaviour
     public GameObject sphere2;
     public GameObject sphere3;
     public GameObject sphere4;
+    public GameObject mirror;
+    Vector3 originalMirrorPosition;
+    Quaternion originalMirrorRotation;
+    Vector3 orignialMirrorScale;
 
 
     private void Awake()
     {
         startTimerButton.onClick.AddListener(StartTimer);
+        resetTimerButton.onClick.AddListener(ResetTimer);
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        numberOfErrors = 0;
         currentTime = 0;
         selectedSpheresIDs = new List<string>();
-        SelectEventSystem.current.onTargetSelected += onSphereSelected;
+        SelectEventSystem.current.onTargetSelected += onObjectSelected;
         resetTimerButton.gameObject.SetActive(false);
+        errors.gameObject.SetActive(false);
         sphere2.SetActive(false);
         sphere3.SetActive(false);
         sphere4.SetActive(false);
+        originalMirrorPosition = mirror.transform.position;
+        originalMirrorRotation = mirror.transform.rotation;
+        orignialMirrorScale = mirror.transform.localScale;
     }
 
     // Update is called once per frame
@@ -46,20 +58,27 @@ public class Stopwatch : MonoBehaviour
         }
         TimeSpan time = TimeSpan.FromSeconds(currentTime);
         currentTimeText.text = time.ToString(@"mm\:ss\:fff");
+        errors.text = "Errors: " + numberOfErrors;
     }
 
-    private void onSphereSelected(string name)
-    {
-        if (!selectedSpheresIDs.Contains(name))
-        {
-            selectedSpheresIDs.Add(name);
-            setNextSphere(name);
+    private void onObjectSelected(string name) {
+        if (name.Equals("Miss")){
+            numberOfErrors++;
         }
-        if (selectedSpheresIDs.Count == numberOfSpheresToSelect && stopwatchActive)
+        else
         {
-            stopwatchActive = false;
-            selectedSpheresIDs.Clear();
-            resetTimerButton.gameObject.SetActive(true);
+            if (!selectedSpheresIDs.Contains(name))
+            {
+                selectedSpheresIDs.Add(name);
+                setNextSphere(name);
+            }
+            if (selectedSpheresIDs.Count == numberOfSpheresToSelect && stopwatchActive)
+            {
+                stopwatchActive = false;
+                selectedSpheresIDs.Clear();
+                resetTimerButton.gameObject.SetActive(true);
+                errors.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -77,7 +96,11 @@ public class Stopwatch : MonoBehaviour
         resetTimerButton.gameObject.SetActive(false);
         startTimerButton.gameObject.SetActive(true);
         sphere1.SetActive(true);
-        //TODO: RESET MIRROR
+        errors.gameObject.SetActive(false);
+        numberOfErrors = 0;
+        mirror.transform.position = originalMirrorPosition;
+        mirror.transform.rotation = originalMirrorRotation;
+        mirror.transform.localScale = orignialMirrorScale;
     }
 
     private void setNextSphere(string name)
