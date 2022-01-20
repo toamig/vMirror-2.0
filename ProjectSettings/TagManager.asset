@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ball
   - Timer Button
+  - Tree
   layers:
   - Default
   - TransparentFX

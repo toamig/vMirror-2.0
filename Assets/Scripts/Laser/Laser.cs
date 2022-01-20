@@ -71,12 +71,12 @@ public class Laser : MonoBehaviour
 
                     int startIndex = FindMirrorIndex(orderedHits);
 
-                    if (reflectionHits.Length > startIndex)
+                    if (orderedHits.Length > startIndex + 1)
                     {
                         reflected.SetPosition(0, new Vector3(0, 0, orderedHits[startIndex].distance));
                         reflected.SetPosition(1, new Vector3(0, 0, orderedHits[startIndex + 1].distance));
 
-                        AddOutline(orderedHits[startIndex + 1].collider.gameObject);
+                        //AddOutline(orderedHits[startIndex + 1].collider.gameObject);
                         if (orderedHits[startIndex + 1].transform.gameObject.tag.Equals("Ball"))
                         {
                             SelectEventSystem.current.TargetSelected(orderedHits[startIndex + 1].transform.gameObject.name);
@@ -118,13 +118,24 @@ public class Laser : MonoBehaviour
     {
         DisablePreviousOutlines();
 
-        if (go.TryGetComponent(out Outline outline))
+        GameObject actualGo;
+
+        if(go.tag == "Tree")
+        {
+            actualGo = go.transform.parent.gameObject;
+        }
+        else
+        {
+            actualGo = go;
+        }
+
+        if (actualGo.TryGetComponent(out Outline outline))
         {
             outline.enabled = true;
         }
         else
         {
-            go.AddComponent<Outline>();
+            actualGo.AddComponent<Outline>();
             outline.OutlineMode = Outline.Mode.OutlineAll;
             outline.OutlineWidth = 3;
         }
