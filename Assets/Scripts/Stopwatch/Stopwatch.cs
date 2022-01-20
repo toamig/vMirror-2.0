@@ -15,6 +15,11 @@ public class Stopwatch : MonoBehaviour
     public Button startTimerButton;
     public Button resetTimerButton;
 
+    private void Awake()
+    {
+        startTimerButton.onClick.AddListener(StartTimer);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
