@@ -14,6 +14,11 @@ public class Stopwatch : MonoBehaviour
     private static int numberOfSpheresToSelect = 4;
     public Button startTimerButton;
     public Button resetTimerButton;
+    public GameObject sphere1;
+    public GameObject sphere2;
+    public GameObject sphere3;
+    public GameObject sphere4;
+
 
     private void Awake()
     {
@@ -27,6 +32,9 @@ public class Stopwatch : MonoBehaviour
         selectedSpheresIDs = new List<string>();
         SelectEventSystem.current.onTargetSelected += onSphereSelected;
         resetTimerButton.gameObject.SetActive(false);
+        sphere2.SetActive(false);
+        sphere3.SetActive(false);
+        sphere4.SetActive(false);
     }
 
     // Update is called once per frame
@@ -45,6 +53,7 @@ public class Stopwatch : MonoBehaviour
         if (!selectedSpheresIDs.Contains(name))
         {
             selectedSpheresIDs.Add(name);
+            setNextSphere(name);
         }
         if (selectedSpheresIDs.Count == numberOfSpheresToSelect && stopwatchActive)
         {
@@ -67,5 +76,29 @@ public class Stopwatch : MonoBehaviour
         selectedSpheresIDs.Clear();
         resetTimerButton.gameObject.SetActive(false);
         startTimerButton.gameObject.SetActive(true);
+        sphere1.SetActive(true);
+        //TODO: RESET MIRROR
+    }
+
+    private void setNextSphere(string name)
+    {
+        switch (name)
+        {
+            case "Sphere 1":
+                sphere1.SetActive(false);
+                sphere2.SetActive(true);
+                break;
+            case "Sphere 2":
+                sphere2.SetActive(false);
+                sphere3.SetActive(true);
+                break;
+            case "Sphere 3":
+                sphere3.SetActive(false);
+                sphere4.SetActive(true);
+                break;
+            case "Sphere 4":
+                sphere4.SetActive(false);
+                break;
+        }
     }
 }
