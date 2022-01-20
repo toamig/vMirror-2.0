@@ -83,7 +83,8 @@ public class Laser : MonoBehaviour
                         }
                         else
                         {
-                            SelectEventSystem.current.TargetSelected("Miss");
+                            string message = "Miss-" + orderedHits[startIndex + 1].transform.gameObject.GetInstanceID();
+                            SelectEventSystem.current.TargetSelected(message);
                         }
                     }
                     else

@@ -24,6 +24,7 @@ public class Stopwatch : MonoBehaviour
     Vector3 originalMirrorPosition;
     Quaternion originalMirrorRotation;
     Vector3 orignialMirrorScale;
+    string lastSelectedID = "";
 
 
     private void Awake()
@@ -62,22 +63,28 @@ public class Stopwatch : MonoBehaviour
     }
 
     private void onObjectSelected(string name) {
-        if (name.Equals("Miss")){
-            numberOfErrors++;
-        }
-        else
+        if (stopwatchActive)
         {
-            if (!selectedSpheresIDs.Contains(name))
+            string[] split = name.Split('-');
+            if (split.Length == 2 && split[0].Equals("Miss") && !lastSelectedID.Equals(split[1]))
             {
-                selectedSpheresIDs.Add(name);
-                setNextSphere(name);
+                numberOfErrors++;
+                lastSelectedID = split[1];
             }
-            if (selectedSpheresIDs.Count == numberOfSpheresToSelect && stopwatchActive)
+            else
             {
-                stopwatchActive = false;
-                selectedSpheresIDs.Clear();
-                resetTimerButton.gameObject.SetActive(true);
-                errors.gameObject.SetActive(true);
+                if (!selectedSpheresIDs.Contains(name))
+                {
+                    selectedSpheresIDs.Add(name);
+                    setNextSphere(name);
+                }
+                if (selectedSpheresIDs.Count == numberOfSpheresToSelect && stopwatchActive)
+                {
+                    stopwatchActive = false;
+                    selectedSpheresIDs.Clear();
+                    resetTimerButton.gameObject.SetActive(true);
+                    errors.gameObject.SetActive(true);
+                }
             }
         }
     }
@@ -101,6 +108,7 @@ public class Stopwatch : MonoBehaviour
         mirror.transform.position = originalMirrorPosition;
         mirror.transform.rotation = originalMirrorRotation;
         mirror.transform.localScale = orignialMirrorScale;
+        lastSelectedID = "";
     }
 
     private void setNextSphere(string name)
