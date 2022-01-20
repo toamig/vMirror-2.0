@@ -13,14 +13,11 @@ public class SelectEventSystem : MonoBehaviour
         current = this;
     }
 
-    public event Action<string> onTargetSelected;
+    public event Action<GameObject> onTargetSelected;
 
-    public void TargetSelected(string name)
+    public void TargetSelected(GameObject go)
     {
-        if (onTargetSelected != null)
-        {
-            onTargetSelected(name);
-        }
+            onTargetSelected(go);
     }
 
 }

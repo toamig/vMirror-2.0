@@ -12,7 +12,7 @@ public class Stopwatch : MonoBehaviour
     float currentTime;
     public Text currentTimeText;
     public Text errors;
-    private List<string> selectedSpheresIDs;
+    private List<GameObject> selectedSpheres;
     private static int numberOfSpheresToSelect = 4;
     public Button startTimerButton;
     public Button resetTimerButton;
@@ -38,7 +38,7 @@ public class Stopwatch : MonoBehaviour
     {
         numberOfErrors = 0;
         currentTime = 0;
-        selectedSpheresIDs = new List<string>();
+        selectedSpheres = new List<GameObject>();
         SelectEventSystem.current.onTargetSelected += onObjectSelected;
         resetTimerButton.gameObject.SetActive(false);
         errors.gameObject.SetActive(false);
@@ -62,28 +62,30 @@ public class Stopwatch : MonoBehaviour
         errors.text = "Errors: " + numberOfErrors;
     }
 
-    private void onObjectSelected(string name) {
+    private void onObjectSelected(GameObject go) {
         if (stopwatchActive)
         {
-            string[] split = name.Split('-');
-            if (split.Length == 2 && split[0].Equals("Miss") && !lastSelectedID.Equals(split[1]))
+            if(go.tag == "Ball")
             {
-                numberOfErrors++;
-                lastSelectedID = split[1];
+                if (!selectedSpheres.Contains(go))
+                {
+                    selectedSpheres.Add(go);
+                    setNextSphere(go.name);
+                }
+                if (selectedSpheres.Count == numberOfSpheresToSelect && stopwatchActive)
+                {
+                    stopwatchActive = false;
+                    selectedSpheres.Clear();
+                    resetTimerButton.gameObject.SetActive(true);
+                    errors.gameObject.SetActive(true);
+                }
             }
             else
             {
-                if (!selectedSpheresIDs.Contains(name))
+                if(lastSelectedID != go.name)
                 {
-                    selectedSpheresIDs.Add(name);
-                    setNextSphere(name);
-                }
-                if (selectedSpheresIDs.Count == numberOfSpheresToSelect && stopwatchActive)
-                {
-                    stopwatchActive = false;
-                    selectedSpheresIDs.Clear();
-                    resetTimerButton.gameObject.SetActive(true);
-                    errors.gameObject.SetActive(true);
+                    numberOfErrors++;
+                    lastSelectedID = go.name;
                 }
             }
         }
@@ -99,7 +101,7 @@ public class Stopwatch : MonoBehaviour
     {
         stopwatchActive = false;
         currentTime = 0;
-        selectedSpheresIDs.Clear();
+        selectedSpheres.Clear();
         resetTimerButton.gameObject.SetActive(false);
         startTimerButton.gameObject.SetActive(true);
         sphere1.SetActive(true);
