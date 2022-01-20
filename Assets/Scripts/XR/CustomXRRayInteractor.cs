@@ -173,7 +173,18 @@ public class CustomXRRayInteractor : XRRayInteractor
 
         var scaleFactor = directionAmount * (m_ScaleSpeedC * Time.deltaTime);
 
-        mirror.localScale = new Vector3(mirror.localScale.x + scaleFactor, mirror.localScale.y, mirror.localScale.z - scaleFactor);
+        if(scaleFactor >= 0 && mirror.localScale.x <= 4)
+        {
+            mirror.localScale = new Vector3(mirror.localScale.x + scaleFactor, mirror.localScale.y, mirror.localScale.z - scaleFactor);
+        }
+        else if (scaleFactor < 0 && mirror.localScale.x >= 0.5)
+        {
+            mirror.localScale = new Vector3(mirror.localScale.x + scaleFactor, mirror.localScale.y, mirror.localScale.z - scaleFactor);
+        }
+        else
+        {
+            return;
+        }
     }
 
     static bool TryRead2DAxis(InputAction action, out Vector2 output)
