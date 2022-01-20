@@ -615,7 +615,7 @@ MonoBehaviour:
   m_ValidColorGradient:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 0}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -644,7 +644,7 @@ MonoBehaviour:
   m_InvalidColorGradient:
     serializedVersion: 2
     key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 1, g: 0, b: 0, a: 0}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -853,7 +853,7 @@ MonoBehaviour:
   m_HapticHoverCancelDuration: 0
   m_LineType: 0
   m_BlendVisualLinePoints: 1
-  m_MaxRaycastDistance: 30
+  m_MaxRaycastDistance: 100
   m_RayOriginTransform: {fileID: 0}
   m_ReferenceFrame: {fileID: 0}
   m_Velocity: 16
@@ -882,7 +882,7 @@ MonoBehaviour:
   m_AnchorRotateReferenceFrame: {fileID: 0}
   m_RotateSpeedC: 20
   m_TranslateSpeedC: 10
-  m_ScaleSpeedC: 2
+  m_ScaleSpeedC: 1
   m_mirror: {fileID: 1956492983}
   m_laser: {fileID: 1117256783}
 --- !u!114 &349578957
@@ -3614,7 +3614,7 @@ MonoBehaviour:
   m_ValidColorGradient:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 0}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -3643,7 +3643,7 @@ MonoBehaviour:
   m_InvalidColorGradient:
     serializedVersion: 2
     key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 1, g: 0, b: 0, a: 0}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -3852,7 +3852,7 @@ MonoBehaviour:
   m_HapticHoverCancelDuration: 0
   m_LineType: 0
   m_BlendVisualLinePoints: 1
-  m_MaxRaycastDistance: 30
+  m_MaxRaycastDistance: 100
   m_RayOriginTransform: {fileID: 0}
   m_ReferenceFrame: {fileID: 0}
   m_Velocity: 16
@@ -3881,7 +3881,7 @@ MonoBehaviour:
   m_AnchorRotateReferenceFrame: {fileID: 0}
   m_RotateSpeedC: 20
   m_TranslateSpeedC: 10
-  m_ScaleSpeedC: 2
+  m_ScaleSpeedC: 1
   m_mirror: {fileID: 1956492983}
   m_laser: {fileID: 1001080216}
 --- !u!114 &1422789402
@@ -4386,15 +4386,15 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1579165434}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.78}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children:
   - {fileID: 1924496440}
   - {fileID: 1405734216}
   - {fileID: 1289920880}
-  m_Father: {fileID: 1987252424}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5405,9 +5405,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 535307729}
-  - {fileID: 1579165439}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1991359979
 GameObject:
