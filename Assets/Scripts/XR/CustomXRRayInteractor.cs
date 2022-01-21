@@ -55,11 +55,14 @@ public class CustomXRRayInteractor : XRRayInteractor
         set => m_laser = value;
     }
 
+    private bool laserOn;
+
     protected override void Awake()
     {
         base.Awake();
         var actionBasedController = xrController as ActionBasedController;
         actionBasedController.activateAction.action.performed += _ => m_Rotating = !m_Rotating;
+        laserOn = false;
     }
 
     public override void ProcessInteractor(XRInteractionUpdateOrder.UpdatePhase updatePhase)
@@ -131,10 +134,12 @@ public class CustomXRRayInteractor : XRRayInteractor
                 if (actionBasedController.activateAction.action.IsPressed())
                 {
                     m_laser.SetActive(true);
+                    interactionLayers = 0;
                 }
                 if (actionBasedController.activateAction.action.WasReleasedThisFrame())
                 {
                     m_laser.SetActive(false);
+                    interactionLayers = -1;
                 }
             }
         }

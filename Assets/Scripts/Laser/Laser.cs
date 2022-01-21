@@ -121,13 +121,15 @@ public class Laser : MonoBehaviour
             actualGo = go;
         }
 
-        if (actualGo.TryGetComponent(out Outline outline))
+        Outline outline;
+
+        if (actualGo.TryGetComponent(out outline))
         {
             outline.enabled = true;
         }
         else
         {
-            actualGo.AddComponent<Outline>();
+            outline = actualGo.AddComponent<Outline>();
             outline.OutlineMode = Outline.Mode.OutlineAll;
             outline.OutlineWidth = 3;
         }

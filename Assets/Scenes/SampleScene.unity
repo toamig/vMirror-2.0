@@ -2977,6 +2977,7 @@ LineRenderer:
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -3554,6 +3555,7 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
+  - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   m_Parameters:
@@ -7002,6 +7004,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1655876411}
     m_Modifications:
+    - target: {fileID: 2578656235686010229, guid: 27cb544d5eed0de4c82df62025de66c0, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 23
+      objectReference: {fileID: 0}
     - target: {fileID: 2578656236811812117, guid: 27cb544d5eed0de4c82df62025de66c0, type: 3}
       propertyPath: m_Name
       value: Mirror
@@ -7054,6 +7060,14 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 619186375}
+    - target: {fileID: 7308004617686741012, guid: 27cb544d5eed0de4c82df62025de66c0, type: 3}
+      propertyPath: m_SmoothPosition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7308004617686741012, guid: 27cb544d5eed0de4c82df62025de66c0, type: 3}
+      propertyPath: m_SmoothRotation
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7308004617686741012, guid: 27cb544d5eed0de4c82df62025de66c0, type: 3}
       propertyPath: m_InteractionManager
       value: 
